@@ -1,4 +1,5 @@
-__version__ = "0.0.0"
+__version__ = "0.0.1"
+from functools import update_wrapper
 
 
 class LazyProperty(property):
@@ -10,10 +11,12 @@ class LazyProperty(property):
         doc = doc or method.__doc__
         super(LazyProperty, self).__init__(fget=fget, fset=fset, fdel=fdel, doc=doc)
 
+        update_wrapper(self, method)
+
     def __get__(self, instance, owner):
 
         if instance is None:
-            raise AttributeError
+            return self
 
         if hasattr(instance, self.cache_name):
             result = getattr(instance, self.cache_name)

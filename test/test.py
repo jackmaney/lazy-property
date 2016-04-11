@@ -65,3 +65,22 @@ class LazyWritablePropertyTest(unittest.TestCase):
         self.assertEqual(lwc.foo, 2, "Assignment didn't work correctly")
 
         self.assertEqual(lwc.counter, 1, "The counter is out of whack...")
+
+class DocStringPreservationTest(unittest.TestCase):
+
+    class Foo(object):
+
+        @LazyProperty
+        def bar(self):
+            """bar's docstring"""
+            return 1
+
+    def test_docstring(self):
+
+        f = self.Foo()
+
+        self.assertEqual(f.bar, 1, "Wrong value for the property...somehow...")
+
+        self.assertEqual(self.Foo.bar.__doc__, "bar's docstring",
+                         "Docstring is wrong, got '{}'".format(self.Foo.bar.__doc__))
+
